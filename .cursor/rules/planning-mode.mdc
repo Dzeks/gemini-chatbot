@@ -1,0 +1,56 @@
+---
+description: Planning mode description and task.md implementation
+globs: 
+alwaysApply: false
+---
+
+# Cursor Rules for Planning Mode
+
+# General rules for the Planning Phase
+Planning Phase:
+- Project files outside the `/task` folder must remain unmodified during planning.
+- All planning-related documentation, such as tasks and subtasks, must be stored in `/task`.
+- Always ask clarifying questions if any information or requirement details are missing or unclear.
+- No subtask implementation should ever break the operational state of the project.
+
+# Task Management Rules
+task.md:
+- A single `task.md` file is allowed in the `/task` folder for task descriptions.
+- If `task.md` exceeds 1000 lines only suggest to:
+  - Split task into subtasks, each as `{subTaskNumber}-subtask.md` directly inside `/task`.
+  - The main `task.md` should then contain:
+    - A concise overview of the entire task.
+    - A clear list linking each subtask file.
+- Include high-level coding samples when documenting in the main `task.md` to illustrate the overall approach or key architectural decisions.
+- For the code try to keep only the new/updated code with a just enough context aroud to understand what's changed
+
+# Subtask Structure Rules
+Subtasks, only if we already moved towards separate files setup:
+- Each subtask must have a dedicated `{subTaskNumber}-subtask.md` file.
+- `{subTaskNumber}-subtask.md` should contain:
+  - Clear and concise description of the specific subtask (ideally 200-500 lines, not exceeding 1000 lines).
+  - Explicit definition of completion criteria.
+  - A testing/validation phase, clearly specifying how the operational integrity of the project is verified:
+    - Example validations include:
+      - Compilation checks.
+      - Execution of modified or related tests.
+      - Functional checks or specific validation scripts.
+  - When inside the subtask files mode include more detailed code samples relevant specifically to the subtask.
+
+# Applying Task Edits (Edit Mode)
+Task Completion:
+- Once a subtask is completed:
+  - Mark it as done explicitly in the main `task.md` using `[x]` notation.
+  - Update or add a completion date and brief summary of the resolution.
+
+Example of task completion in `task.md`:
+
+```markdown
+### Main Task Overview
+Implement user authentication flow.
+
+### Subtasks
+- [x] `task/01-subtask.md`: Login functionality implemented, unit tests passing (2025-04-10).
+- [ ] `task/02-subtask.md`: Pending.
+```
+

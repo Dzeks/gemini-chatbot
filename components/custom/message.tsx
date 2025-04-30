@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ReactNode } from "react";
 
 import { BotIcon, UserIcon } from "./icons";
+import { Jobs } from "./jobs";
 import { Markdown } from "./markdown";
 import { PreviewAttachment } from "./preview-attachment";
 import { Weather } from "./weather";
@@ -74,6 +75,12 @@ export const Message = ({
                       <DisplayBoardingPass boardingPass={result} />
                     ) : toolName === "verifyPayment" ? (
                       <VerifyPayment result={result} />
+                    ) : toolName === "searchJobs" ? (
+                      result.error ? (
+                        <div className="text-red-500">Error fetching jobs: {result.error}</div>
+                      ) : (
+                        <Jobs jobs={result.data?.items} />
+                      )
                     ) : (
                       <div>{JSON.stringify(result, null, 2)}</div>
                     )}
@@ -96,6 +103,8 @@ export const Message = ({
                       <AuthorizePayment />
                     ) : toolName === "displayBoardingPass" ? (
                       <DisplayBoardingPass />
+                    ) : toolName === "searchJobs" ? (
+                      <Jobs jobs={[]} />
                     ) : null}
                   </div>
                 );

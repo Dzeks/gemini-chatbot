@@ -44,8 +44,10 @@ export async function POST(request: Request) {
         - ask for any details you don't know, like name of passenger, etc.'
         - C and D are aisle seats, A and F are window seats, B and E are middle seats
         - assume the most popular airports for the origin and destination
+        - You can also help users find jobs! If they ask about jobs or job listings, use searchJobs tool.
         - here's the optimal flow
           - search for flights
+          - suggest to work a bit there and search for the 5 recent jobs in that location
           - choose flight
           - select seats
           - create reservation (ask user whether to proceed with payment or change reservation)
@@ -68,6 +70,35 @@ export async function POST(request: Request) {
 
           const weatherData = await response.json();
           return weatherData;
+        },
+      },
+      searchJobs: {
+        description: "Search for job listings from Coople",
+        parameters: z.object({
+          pageSize: z.number().optional().describe("Number of job listings to return"),
+        }),
+        execute: async ({ pageSize = 5 }) => {
+          try {
+            const response = await fetch(
+              `https://www.coople.com/ch/resources/api/work-assignments/public-jobs/list?pageNum=0&pageSize=${pageSize}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error(`Failed to fetch jobs: ${response.status}`);
+            }
+
+            const jobsData = await response.json();
+            return jobsData;
+          } catch (error) {
+            console.error("Error fetching job listings:", error);
+            return { error: "Failed to fetch job listings." };
+          }
         },
       },
       displayFlightStatus: {
